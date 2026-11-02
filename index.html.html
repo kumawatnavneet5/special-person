@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#21151f">
+<title>A Little World Made Just For You</title>
+<style>
+:root {
+  --site-primary: #b76e79;
+  --site-on-primary: #fffaf8;
+  --site-secondary: #e8cda9;
+  --site-on-secondary: #38252b;
+  --site-background: #21151f;
+  --site-on-background: #fff4ef;
+  --site-font-body: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  --site-font-heading: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  --ink: #fff4ef;
+  --muted: #d5bbc1;
+  --line: rgba(255,239,229,.17);
+  --panel: rgba(255,245,239,.07);
+  --gold: #e8cda9;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--site-background); color: var(--site-on-background); font-family: var(--site-font-body); }
+button, a { font: inherit; }
+#app { min-height: 100vh; width: 100%; overflow: hidden; background: var(--site-background); color: var(--site-on-background); border-radius: 0; position: relative; }
+.decor { position: absolute; pointer-events: none; opacity: var(--site-decoration-opacity); z-index: 0; }
+.grain { inset: 0; opacity: calc(var(--site-decoration-opacity) * .12); background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E"); }
+.glow { width: 420px; height: 420px; border-radius: 50%; filter: blur(95px); background: #a74f70; opacity: .18; }
+.glow.one { top: -180px; right: -100px; }
+.glow.two { top: 950px; left: -230px; background: #d7a875; opacity: .12; }
+.nav { position: relative; z-index: 2; max-width: 1160px; margin: auto; padding: 28px 6vw; display: flex; align-items: center; justify-content: space-between; }
+.brand { letter-spacing: .22em; text-transform: uppercase; font-size: 10px; color: var(--gold); }
+.nav a { text-decoration: none; color: var(--muted); font-size: 12px; margin-left: 25px; transition: color .2s; }
+.nav a:hover { color: white; }
+.hero { min-height: 690px; display: grid; place-items: center; text-align: center; padding: 65px 22px 100px; position: relative; z-index: 1; }
+.eyebrow { color: var(--gold); letter-spacing: .34em; text-transform: uppercase; font-size: 10px; }
+.hero h1 { font-family: var(--site-font-heading); font-weight: 400; font-size: clamp(54px, 9vw, 112px); line-height: .98; letter-spacing: -.055em; margin: 27px 0 22px; }
+.hero h1 em { color: var(--gold); font-weight: 400; }
+.hero p { color: var(--muted); max-width: 490px; margin: 0 auto; line-height: 1.8; font-size: 14px; }
+.hero-rule { width: 1px; height: 72px; background: linear-gradient(transparent, var(--gold)); margin: 42px auto 0; }
+.cta { display: inline-flex; align-items: center; gap: 12px; border: 1px solid rgba(232,205,169,.65); color: var(--ink); background: rgba(183,110,121,.18); border-radius: 99px; padding: 14px 22px; margin-top: 30px; cursor: pointer; transition: .25s; }
+.cta:hover { background: var(--site-primary); transform: translateY(-3px); }
+.section { position: relative; z-index: 1; max-width: 1060px; margin: auto; padding: 92px 6vw; }
+.section-head { text-align: center; margin-bottom: 45px; }
+.kicker { color: var(--gold); text-transform: uppercase; letter-spacing: .3em; font-size: 9px; }
+.section h2 { font: 400 clamp(36px, 5vw, 58px)/1.1 var(--site-font-heading); margin: 14px 0; }
+.section-head p { color: var(--muted); font-size: 13px; line-height: 1.8; }
+.story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.story-card { border: 1px solid var(--line); background: var(--panel); padding: 30px; min-height: 210px; border-radius: calc(18px * var(--site-radius-scale)); position: relative; overflow: hidden; }
+.story-card .num { color: var(--gold); font: 36px var(--site-font-heading); opacity: .8; }
+.story-card h3 { font: 26px var(--site-font-heading); font-weight: 400; margin: 17px 0 8px; }
+.story-card p { color: var(--muted); font-size: 12px; line-height: 1.8; margin: 0; }
+.memory-grid { display: grid; grid-template-columns: 1.1fr .9fr 1fr; gap: 15px; align-items: stretch; }
+.memory { min-height: 290px; border-radius: calc(16px * var(--site-radius-scale)); border: 1px solid var(--line); padding: 18px; display: flex; align-items: end; overflow: hidden; position: relative; background: linear-gradient(145deg, #704657, #352231 65%, #20151f); }
+.memory:nth-child(2) { min-height: 350px; background: linear-gradient(155deg, #b27c72, #684655 55%, #241822); }
+.memory:nth-child(3) { background: linear-gradient(145deg, #6c5c61, #3b2a38 60%, #20151f); }
+.memory:before { content: "✦"; position: absolute; top: 25px; right: 25px; color: rgba(255,239,229,.55); font-size: 25px; }
+.memory-label { position: relative; z-index: 1; }
+.memory-label span { font-size: 9px; text-transform: uppercase; letter-spacing: .2em; color: var(--gold); }
+.memory-label h3 { font: 25px var(--site-font-heading); font-weight: 400; margin: 8px 0 0; }
+.memory-note { color: var(--muted); font-size: 11px; margin-top: 7px; }
+.letter-wrap { max-width: 720px; margin: auto; text-align: center; }
+.envelope { border: 1px solid rgba(232,205,169,.45); background: linear-gradient(145deg, rgba(183,110,121,.2), rgba(255,255,255,.04)); padding: 45px 30px; border-radius: calc(20px * var(--site-radius-scale)); }
+.envelope-icon { font-size: 36px; margin-bottom: 18px; }
+.envelope h3 { font: 34px var(--site-font-heading); font-weight: 400; margin: 0 0 10px; }
+.envelope p { color: var(--muted); font-size: 12px; line-height: 1.8; }
+.letter { display: none; text-align: left; max-width: 590px; margin: 30px auto 0; padding: 30px; background: rgba(255,246,239,.96); color: #4b3039; border-radius: 3px; box-shadow: 0 20px 65px rgba(0,0,0,.22); transform-origin: top; animation: unfold .65s ease both; }
+.letter.show { display: block; }
+.letter .salute { color: #a35c6b; font: italic 27px var(--site-font-heading); }
+.letter p { color: #654b52; font: 14px/1.9 var(--site-font-body); }
+.letter .sign { text-align: right; font: italic 22px var(--site-font-heading); color: #a35c6b; margin-top: 24px; }
+@keyframes unfold { from { opacity: 0; transform: translateY(-12px) scaleY(.94); } to { opacity: 1; transform: none; } }
+.wish { text-align: center; padding: 90px 20px 110px; position: relative; z-index: 1; }
+.wish h2 { font: 400 clamp(42px, 7vw, 78px)/1.04 var(--site-font-heading); margin: 18px 0; }
+.wish h2 span { color: var(--gold); font-style: italic; }
+.wish p { color: var(--muted); font-size: 13px; line-height: 1.8; }
+.footer { border-top: 1px solid var(--line); text-align: center; padding: 28px 15px; color: #b89da5; font-size: 10px; letter-spacing: .12em; position: relative; z-index: 1; }
+.footer strong { color: var(--gold); font-weight: 400; }
+.sparkle { position: absolute; color: var(--gold); opacity: .5; animation: float 5s ease-in-out infinite; }
+.sparkle.s1 { top: 22%; left: 13%; font-size: 18px; }
+.sparkle.s2 { top: 38%; right: 14%; font-size: 13px; animation-delay: 1.4s; }
+.sparkle.s3 { bottom: 17%; left: 22%; font-size: 12px; animation-delay: 2s; }
+@keyframes float { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-15px) rotate(18deg); } }
+.hero > div:last-child { animation: heroReveal 1.15s cubic-bezier(.2,.75,.25,1) both; }
+.hero .eyebrow { animation: softGlow 3s ease-in-out infinite; }
+.story-card, .memory, .envelope { transition: transform .45s cubic-bezier(.2,.75,.25,1), border-color .35s, box-shadow .45s; }
+.story-card:hover, .memory:hover, .envelope:hover { transform: translateY(-8px); border-color: rgba(232,205,169,.55); box-shadow: 0 18px 45px rgba(0,0,0,.18); }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.75,.25,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.memory { animation: memoryDrift 7s ease-in-out infinite; }
+.memory:nth-child(2) { animation-delay: -2.3s; }
+.memory:nth-child(3) { animation-delay: -4.6s; }
+@keyframes heroReveal { from { opacity: 0; transform: translateY(30px); filter: blur(7px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes softGlow { 0%,100% { text-shadow: 0 0 0 rgba(232,205,169,0); } 50% { text-shadow: 0 0 18px rgba(232,205,169,.55); } }
+@keyframes memoryDrift { 0%,100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+.confetti { position: fixed; z-index: 20; top: -15px; width: 7px; height: 12px; pointer-events: none; animation: fall 3.5s linear forwards; }
+@keyframes fall { to { transform: translateY(110vh) rotate(760deg); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } .reveal { opacity: 1; transform: none; } }
+@media (max-width: 700px) {
+  .nav { padding: 22px 6vw; }
+  .nav a { margin-left: 12px; font-size: 10px; }
+  .hero { min-height: 610px; }
+  .story-grid { grid-template-columns: 1fr; }
+  .story-card { min-height: 175px; }
+  .memory-grid { grid-template-columns: 1fr 1fr; }
+  .memory { min-height: 220px; }
+  .memory:nth-child(2) { min-height: 250px; }
+  .memory:nth-child(3) { grid-column: 1 / -1; min-height: 190px; }
+  .section { padding-top: 70px; padding-bottom: 70px; }
+}
+@media (max-width: 420px) { .brand { font-size: 8px; letter-spacing: .14em; } .nav a { margin-left: 8px; } .memory-grid { grid-template-columns: 1fr; } .memory, .memory:nth-child(2), .memory:nth-child(3) { min-height: 205px; grid-column: auto; } }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="decor grain"></div><div class="decor glow one"></div><div class="decor glow two"></div>
+  <nav class="nav"><div class="brand">A day made of magic ✦</div><div><a href="#memories">Memories</a><a href="#letter">A letter</a></div></nav>
+  <main>
+    <section class="hero">
+      <span class="sparkle s1">✧</span><span class="sparkle s2">✦</span><span class="sparkle s3">✧</span>
+      <div>
+        <div class="eyebrow">Today is all about you</div>
+        <h1>Happy Birthday,<br><em>My Devi.</em></h1>
+        <p>Some bonds are written by the heart, not by blood. You are my chosen sister, my blessing, and someone I will always look up to. Today, this little universe celebrates you.</p>
+        <button class="cta" onclick="document.querySelector('#letter').scrollIntoView({behavior:'smooth'})">A little surprise awaits <span>↗</span></button>
+        <div class="hero-rule"></div>
+      </div>
+    </section>
+    <section class="section" id="memories">
+      <div class="section-head"><div class="kicker">A few things worth celebrating</div><h2>Little things. <em style="color:var(--gold)">Big love.</em></h2><p>Because the best memories are made of ordinary moments with extraordinary people.</p></div>
+      <div class="story-grid">
+        <article class="story-card"><div class="num">01</div><h3>Your endless kindness</h3><p>You have a way of making people feel cared for. Never forget how much that means.</p></article>
+        <article class="story-card"><div class="num">02</div><h3>Your unstoppable spirit</h3><p>Keep dreaming big, laughing loudly, and being unapologetically yourself.</p></article>
+        <article class="story-card"><div class="num">03</div><h3>A bond beyond blood</h3><p>We may not be siblings by birth, but the place you hold in my heart is just as real and forever special.</p></article>
+        <article class="story-card"><div class="num">04</div><h3>Everything ahead</h3><p>May this new chapter bring beautiful surprises, peaceful days, and dreams coming true.</p></article>
+      </div>
+    </section>
+    <section class="section" style="padding-top:30px">
+      <div class="section-head"><div class="kicker">The photo corner</div><h2>Moments to <em style="color:var(--gold)">keep forever.</em></h2><p>These spaces are ready for your favourite pictures together.</p></div>
+      <div class="memory-grid">
+        <div class="memory"><div class="memory-label"><span>Memory no. 01</span><h3>That happy day</h3><div class="memory-note">Add a favourite photo here</div></div></div>
+        <div class="memory"><div class="memory-label"><span>Memory no. 02</span><h3>Us being us</h3><div class="memory-note">Add a favourite photo here</div></div></div>
+        <div class="memory"><div class="memory-label"><span>Memory no. 03</span><h3>One for the album</h3><div class="memory-note">Add a favourite photo here</div></div></div>
+      </div>
+    </section>
+    <section class="section" id="letter">
+      <div class="section-head"><div class="kicker">Open when you're ready</div><h2>A note, <em style="color:var(--gold)">from the heart.</em></h2></div>
+      <div class="letter-wrap"><div class="envelope"><div class="envelope-icon">✉</div><h3>For my dearest Devi</h3><p>A tiny letter for someone who deserves the biggest celebration.</p><button class="cta" onclick="openLetter()" id="openBtn">Open your letter <span>♡</span></button></div>
+        <div class="letter" id="letterCard"><div class="salute">My dearest Devi,</div><p>Happy Birthday! ❤️</p><p>Our bond may not be by blood, but the place you hold in my heart is just as special. You are my sister by choice, and I consider you one of the most precious blessings in my life. I don't just see you as a sister; I truly see you as my Devi.</p><p>Thank you for being a part of my life and for all the little moments, conversations, and smiles. I hope this year brings you happiness, peace, endless opportunities, and everything you have been wishing for.</p><p>Always keep smiling and keep being the wonderful person you are. No matter how time changes or how far life takes us, you will always have a special place in my heart. ❤️</p><div class="sign">Your brother</div></div>
+      </div>
+    </section>
+    <section class="wish"><div class="kicker">One last thing</div><h2>May your year be<br><span>beautifully unforgettable.</span></h2><p>More laughter. More adventures. More reasons to celebrate you.<br>Happy Birthday, Meri Devi. ✨</p><button class="cta" onclick="celebrate()">Make a little wish ✨</button></section>
+  </main>
+  <footer class="footer">MADE WITH <strong>LOVE</strong> · FOR MY DEVI · A BOND BEYOND BLOOD ♡</footer>
+</div>
+<script>
+function openLetter() {
+  const card = document.getElementById('letterCard');
+  card.classList.add('show');
+  document.getElementById('openBtn').textContent = 'Your letter is open ♡';
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  celebrate();
+}
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.14 });
+document.querySelectorAll('.section-head, .story-card, .memory, .envelope, .wish').forEach((element, index) => {
+  element.classList.add('reveal');
+  element.style.transitionDelay = (index % 4) * 90 + 'ms';
+  revealObserver.observe(element);
+});
+function celebrate() {
+  const symbols = ['✦', '✧', '♡', '·'];
+  for (let i = 0; i < 55; i++) {
+    const piece = document.createElement('i');
+    piece.className = 'confetti';
+    piece.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.color = ['#e8cda9', '#d98f9c', '#fff4ef', '#b76e79'][i % 4];
+    piece.style.animationDelay = Math.random() * .9 + 's';
+    piece.style.fontStyle = 'normal';
+    piece.style.fontSize = (9 + Math.random() * 12) + 'px';
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 4500);
+  }
+}
+</script>
+</body>
+</html>
